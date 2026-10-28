@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridal Shower Invitation | Saba & Junaid</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#061a14',
+                            900: '#0a2920',
+                            800: '#113c30',
+                        },
+                        roseGold: {
+                            light: '#f7d6ce',
+                            DEFAULT: '#b76e79',
+                            dark: '#8c4852',
+                        },
+                        champagne: {
+                            light: '#fbf3e4',
+                            DEFAULT: '#e6ca65',
+                            dark: '#aa8c2c',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        script: ['Pinyon Script', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fbf3e4 0%, #e6ca65 30%, #f7d6ce 50%, #b76e79 70%, #e6ca65 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 6s linear infinite;
+        }
+
+        .gold-button-gradient {
+            background: linear-gradient(135deg, #b76e79 0%, #e6ca65 50%, #8c4852 100%);
+            background-size: 200% auto;
+            transition: 0.5s;
+        }
+        .gold-button-gradient:hover {
+            background-position: right center;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .glass-card {
+            background: rgba(10, 41, 32, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(230, 202, 101, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page-enter {
+            animation: fadeInScale 0.5s ease-out forwards;
+        }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Mobile Viewport Simulation Mockup Frame for Desktop */
+        @media (min-width: 640px) {
+            .mobile-frame-container {
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 202, 101, 0.15);
+                border: 1px solid rgba(230, 202, 101, 0.25);
+                border-radius: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-emerald-950 text-stone-100 font-sans antialiased min-h-screen overflow-x-hidden selection:bg-roseGold selection:text-white flex items-center justify-center p-0 sm:p-6"
+      x-data="invitationApp()"
+      x-init="initApp()">
+
+    <!-- Animated Ambient Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Web Audio Music Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <button @click="toggleAudio()" 
+                aria-label="Toggle Background Music"
+                class="glass-card p-2.5 rounded-full text-champagne hover:text-white transition-all duration-300 shadow-lg border border-champagne/30">
+            <i data-lucide="music" class="w-4 h-4" x-show="!isPlaying"></i>
+            <i data-lucide="volume-2" class="w-4 h-4 text-roseGold animate-pulse" x-show="isPlaying"></i>
+        </button>
+    </div>
+
+    <!-- STRICT FIXED MOBILE LAYOUT WRAPPER (Max 420px Width centered on Desktop PC) -->
+    <main class="mobile-frame-container relative z-10 w-full max-w-[420px] min-h-screen sm:min-h-[700px] flex flex-col justify-center items-center p-4 bg-emerald-950/80 backdrop-blur-sm sm:my-auto">
+
+        <!-- PAGE 1: PERSONALIZED WELCOME PAGE -->
+        <section x-show="currentPage === 1" 
+                 x-transition:enter="page-enter"
+                 class="w-full text-center flex flex-col items-center justify-center py-8 px-5 glass-card rounded-3xl relative overflow-hidden my-auto border border-champagne/30">
+            
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full border border-champagne/30 bg-emerald-900/50 text-champagne text-[10px] uppercase tracking-widest mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-roseGold animate-ping"></span>
+                <span>Bridal Shower Invitation</span>
+            </div>
+
+            <h2 class="font-script text-4xl text-roseGold-light mb-3" x-text="'Dear ' + guestName + ','"></h2>
+            
+            <h1 class="font-serif text-2xl tracking-wide font-light text-stone-100 mb-6 leading-relaxed">
+                You are <span class="italic font-normal gold-gradient-text font-serif">specially invited</span> to celebrate this joyous occasion.
+            </h1>
+
+            <p class="text-stone-300 text-xs font-light max-w-xs mx-auto mb-8 leading-relaxed">
+                Join us for an intimate, luxurious celebration of love, laughter, and new beginnings as we honor our bride-to-be.
+            </p>
+
+            <div class="w-20 h-[1px] bg-gradient-to-r from-transparent via-champagne to-transparent mb-8"></div>
+
+            <button @click="startExperience()" 
+                    class="gold-button-gradient text-emerald-950 font-bold px-7 py-3 rounded-full tracking-wider uppercase text-xs shadow-xl active:scale-95 transition-all flex items-center space-x-2">
+                <span>Lets Step Inside</span>
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </button>
+        </section>
+
+        <!-- PAGE 2: CELEBRATION PROMPT PAGE -->
+        <section x-show="currentPage === 2" 
+                 x-transition:enter="page-enter"
+                 class="w-full text-center flex flex-col items-center justify-center py-10 px-5 glass-card rounded-3xl relative overflow-hidden my-auto border border-champagne/30"
+                 style="display: none;">
+            
+            <div class="w-14 h-14 rounded-full bg-roseGold/10 border border-roseGold/30 flex items-center justify-center text-roseGold mb-5">
+                <i data-lucide="heart" class="w-7 h-7 animate-bounce"></i>
+            </div>
+
+            <h2 class="font-serif text-2xl text-stone-100 mb-2 font-light">
+                A Moment of Celebration
+            </h2>
+
+            <p class="font-script text-2xl text-roseGold-light mb-6">
+                Will you join us in celebrating our special moment?
+            </p>
+
+            <div class="flex flex-col gap-3 w-full max-w-xs">
+                <button @click="handleResponse('yes')" 
+                        class="w-full gold-button-gradient text-emerald-950 font-bold px-5 py-3.5 rounded-xl text-xs tracking-wider uppercase shadow-lg active:scale-95 transition-all flex items-center justify-center space-x-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Yes, Absolutely!</span>
+                </button>
+
+                <button @click="handleResponse('cantwait')" 
+                        class="w-full bg-emerald-900/60 text-roseGold-light border border-roseGold/40 font-semibold px-5 py-3.5 rounded-xl text-xs tracking-wider uppercase shadow-lg active:scale-95 transition-all flex items-center justify-center space-x-2">
+                    <i data-lucide="party-popper" class="w-4 h-4"></i>
+                    <span>Can't Wait!</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE 3: MAIN DETAILS CARD -->
+        <section x-show="currentPage === 3" 
+                 x-transition:enter="page-enter"
+                 class="w-full flex flex-col items-center py-2 px-1 my-2"
+                 style="display: none;">
+
+            <div class="w-full glass-card rounded-3xl p-5 relative overflow-hidden border border-champagne/40 shadow-2xl text-center">
+                
+                <div class="uppercase text-[10px] tracking-[0.25em] text-champagne/90 mb-2 font-medium">The Bridal Shower Celebration Of</div>
+                
+                <!-- Bride & Groom -->
+                <h1 class="font-serif text-4xl font-light text-stone-100 mb-1">
+                    Bride <span class="gold-gradient-text italic font-normal" x-text="config.brideName"></span>
+                </h1>
+                <p class="font-script text-xl text-roseGold-light my-0.5">&</p>
+                <h2 class="font-serif text-xl text-stone-300 font-light tracking-wide mb-5">
+                    Honorary Groom <span class="text-champagne font-normal" x-text="config.groomName"></span>
+                </h2>
+
+                <!-- COUNTDOWN TIMER -->
+                <div class="my-5 bg-emerald-950/80 border border-champagne/30 rounded-2xl p-3.5 backdrop-blur-md">
+                    <div class="text-[10px] uppercase tracking-widest text-roseGold-light mb-2.5 font-semibold">Counting Down To The Magic</div>
+                    <div class="grid grid-cols-4 gap-1.5 text-center">
+                        <div class="p-2 bg-emerald-900/40 rounded-xl border border-champagne/20">
+                            <span class="block font-serif text-xl text-champagne font-bold" x-text="countdown.days">00</span>
+                            <span class="text-[9px] text-stone-400 uppercase tracking-wider">Days</span>
+                        </div>
+                        <div class="p-2 bg-emerald-900/40 rounded-xl border border-champagne/20">
+                            <span class="block font-serif text-xl text-champagne font-bold" x-text="countdown.hours">00</span>
+                            <span class="text-[9px] text-stone-400 uppercase tracking-wider">Hours</span>
+                        </div>
+                        <div class="p-2 bg-emerald-900/40 rounded-xl border border-champagne/20">
+                            <span class="block font-serif text-xl text-champagne font-bold" x-text="countdown.minutes">00</span>
+                            <span class="text-[9px] text-stone-400 uppercase tracking-wider">Mins</span>
+                        </div>
+                        <div class="p-2 bg-emerald-900/40 rounded-xl border border-champagne/20">
+                            <span class="block font-serif text-xl text-roseGold font-bold" x-text="countdown.seconds">00</span>
+                            <span class="text-[9px] text-stone-400 uppercase tracking-wider">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 1: Date & Time Card (Left: Details, Right: Add to Calendar Button) -->
+                <div class="bg-emerald-900/30 p-3.5 rounded-2xl border border-champagne/20 flex items-center justify-between mb-3.5 gap-2">
+                    <div class="text-left">
+                        <div class="text-[9px] uppercase text-champagne tracking-wider font-semibold">Date & Time</div>
+                        <div class="font-serif text-sm text-stone-100 font-semibold mt-0.5" x-text="config.dateText"></div>
+                        <div class="text-[11px] text-stone-300" x-text="config.timeText"></div>
+                    </div>
+
+                    <button @click="openGoogleCalendar()" 
+                            title="Add to Calendar"
+                            aria-label="Save Event to Calendar"
+                            class="px-2.5 py-2 rounded-xl border border-champagne/40 bg-emerald-900/70 hover:bg-emerald-800 text-stone-100 text-[10px] uppercase tracking-wider font-semibold flex items-center space-x-1 transition-all shadow-md active:scale-95 shrink-0">
+                        <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-champagne"></i>
+                        <span>Add to Calendar</span>
+                    </button>
+                </div>
+
+                <!-- ROW 2: Venue Card (Left: Details, Right: Let's Visit Venue Button) -->
+                <div class="bg-emerald-900/30 p-3.5 rounded-2xl border border-champagne/20 flex items-center justify-between mb-5 gap-2">
+                    <div class="text-left">
+                        <div class="text-[9px] uppercase text-champagne tracking-wider font-semibold">Venue</div>
+                        <div class="font-serif text-sm text-stone-100 font-semibold mt-0.5" x-text="config.venueName"></div>
+                        <div class="text-[11px] text-stone-300" x-text="config.venueLocation"></div>
+                    </div>
+
+                    <a :href="config.mapUrl" 
+                       target="_blank" 
+                       class="px-2.5 py-2 rounded-xl border border-champagne/40 bg-emerald-900/70 hover:bg-emerald-800 text-stone-100 text-[10px] uppercase tracking-wider font-semibold flex items-center space-x-1 transition-all shadow-md active:scale-95 shrink-0">
+                        <i data-lucide="navigation" class="w-3.5 h-3.5 text-champagne"></i>
+                        <span>Let's Visit Venue</span>
+                    </a>
+                </div>
+
+                <!-- WhatsApp RSVP Action -->
+                <div class="pt-2 mb-3">
+                    <button @click="openWhatsAppRSVP()" 
+                            class="w-full py-3 rounded-full gold-button-gradient text-emerald-950 text-xs uppercase tracking-widest font-bold flex items-center justify-center space-x-2 shadow-lg active:scale-95 transition-all">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        <span>Send Your Wishes & RSVP</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Return -->
+                <button @click="goToPage(1)" 
+                        class="text-[11px] text-stone-400 hover:text-champagne transition-colors duration-200 flex items-center justify-center space-x-1 mx-auto py-1">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    <span>Back to Home</span>
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // =========================================================================
+        // EASY EDIT CONFIGURATION SECTION - EDIT YOUR EVENT DETAILS HERE!
+        // =========================================================================
+        const EVENT_CONFIG = {
+            brideName: "Saba Nazir",
+            groomName: "Junaid Khaliq",
+            
+            // Audio URL configuration
+            bgAudioUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
+            
+            // Event Date & Display Text
+            targetDateTime: "2026-10-29T15:00:00", 
+            dateText: "Thursday, Oct 29, 2026",
+            timeText: "03:00 PM",
+            
+            // Venue Details
+            venueName: "River View Marquee",
+            venueLocation: "Kotli Azad Kashmir",
+            mapUrl: "https://maps.google.com/?q=River+View+Marquee+Kotli+Azad+Kashmir",
+
+            // WhatsApp Settings
+            whatsappNumber: "923171887170", // Phone number without '+' sign
+            
+            // Google Calendar Direct Link Config
+            calendarTitle: "Bridal Shower - Saba Nazir & Junaid Khaliq",
+            calendarDetails: "Bridal Shower Celebration for Saba Nazir & Junaid Khaliq at River View Marquee.",
+            calendarStartISO: "20261029T160000", // Format: YYYYMMDDTHHMMSS
+            calendarEndISO: "20261029T190000"    // Format: YYYYMMDDTHHMMSS
+        };
+
+        function invitationApp() {
+            return {
+                currentPage: 1,
+                guestName: 'Raja Haroon',
+                isPlaying: false,
+                audioElement: null,
+                config: EVENT_CONFIG,
+                targetDate: new Date(EVENT_CONFIG.targetDateTime).getTime(),
+                timerInterval: null,
+                countdown: {
+                    days: '00',
+                    hours: '00',
+                    minutes: '00',
+                    seconds: '00'
+                },
+
+                initApp() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const nameParam = urlParams.get('guest');
+                    if (nameParam) {
+                        this.guestName = nameParam;
+                    }
+
+                    // Initialize Audio element with config URL
+                    this.audioElement = new Audio(this.config.bgAudioUrl);
+                    this.audioElement.loop = true;
+
+                    // Start Realtime Live Countdown Timer
+                    this.updateCountdown();
+                    this.timerInterval = setInterval(() => {
+                        this.updateCountdown();
+                    }, 1000);
+
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                },
+
+                startExperience() {
+                    this.playAudio();
+                    this.goToPage(2);
+                },
+
+                playAudio() {
+                    if (this.audioElement && !this.isPlaying) {
+                        this.audioElement.play().then(() => {
+                            this.isPlaying = true;
+                        }).catch(err => {
+                            console.error("Audio playback error:", err);
+                            this.isPlaying = false;
+                        });
+                    }
+                },
+
+                goToPage(pageNumber) {
+                    this.currentPage = pageNumber;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                },
+
+                handleResponse(type) {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#b76e79', '#e6ca65', '#ffffff']
+                    });
+
+                    setTimeout(() => {
+                        this.goToPage(3);
+                    }, 400);
+                },
+
+                updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = this.targetDate - now;
+
+                    if (distance <= 0) {
+                        this.countdown = { days: '00', hours: '00', minutes: '00', seconds: '00' };
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    this.countdown.days = String(days).padStart(2, '0');
+                    this.countdown.hours = String(hours).padStart(2, '0');
+                    this.countdown.minutes = String(minutes).padStart(2, '0');
+                    this.countdown.seconds = String(seconds).padStart(2, '0');
+                },
+
+                openWhatsAppRSVP() {
+                    const message = encodeURIComponent(
+                        `So Exicited! Dear ${this.config.brideName} & ${this.config.groomName}, I (${this.guestName}) am delighted to accept your Bridal Shower invitation for ${this.config.venueName} on ${this.config.dateText}. Looking forward to the celebration!`
+                    );
+                    window.open(`https://wa.me/${this.config.whatsappNumber}?text=${message}`, '_blank');
+                },
+
+                // Directly Opens Google Calendar Event in Browser
+                openGoogleCalendar() {
+                    const title = encodeURIComponent(this.config.calendarTitle);
+                    const details = encodeURIComponent(this.config.calendarDetails);
+                    const location = encodeURIComponent(`${this.config.venueName}, ${this.config.venueLocation}`);
+                    const dates = `${this.config.calendarStartISO}/${this.config.calendarEndISO}`;
+
+                    const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+                    
+                    window.open(googleCalUrl, '_blank');
+                },
+
+                toggleAudio() {
+                    if (this.isPlaying) {
+                        if (this.audioElement) {
+                            this.audioElement.pause();
+                        }
+                        this.isPlaying = false;
+                    } else {
+                        this.playAudio();
+                    }
+                }
+            };
+        }
+
+        window.onload = function() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height - canvas.height;
+                    this.size = Math.random() * 2.5 + 1;
+                    this.speedY = Math.random() * 0.7 + 0.3;
+                    this.speedX = Math.random() * 0.4 - 0.2;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                    const colors = ['#b76e79', '#e6ca65', '#f7d6ce', '#ffffff'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.rotation = Math.random() * 360;
+                    this.spin = Math.random() * 0.02 - 0.01;
+                }
+
+                update() {
+                    this.y += this.speedY;
+                    this.x += Math.sin(this.y * 0.01) + this.speedX;
+                    this.rotation += this.spin;
+
+                    if (this.y > canvas.height) {
+                        this.reset();
+                        this.y = -10;
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation);
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = this.color;
+                    
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, this.size, this.size * 1.8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            const particleCount = Math.min(Math.floor(window.innerWidth / 18), 45);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        };
+    </script>
+</body>
+</html>
