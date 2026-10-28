@@ -239,7 +239,7 @@
                     </div>
                 </div>
 
-                <!-- ROW 1: Date & Time Card (Left: Details, Right: Add to Calendar Button) -->
+                <!-- ROW 1: Date & Time Card (Left: Details, Right: Save the Date Button) -->
                 <div class="bg-emerald-900/30 p-3.5 rounded-2xl border border-champagne/20 flex items-center justify-between mb-3.5 gap-2">
                     <div class="text-left">
                         <div class="text-[9px] uppercase text-champagne tracking-wider font-semibold">Date & Time</div>
@@ -248,11 +248,11 @@
                     </div>
 
                     <button @click="openGoogleCalendar()" 
-                            title="Add to Calendar"
+                            title="Save the Date"
                             aria-label="Save Event to Calendar"
                             class="px-2.5 py-2 rounded-xl border border-champagne/40 bg-emerald-900/70 hover:bg-emerald-800 text-stone-100 text-[10px] uppercase tracking-wider font-semibold flex items-center space-x-1 transition-all shadow-md active:scale-95 shrink-0">
                         <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-champagne"></i>
-                        <span>Add to Calendar</span>
+                        <span>Save the Date</span>
                     </button>
                 </div>
 
@@ -299,8 +299,8 @@
         // EASY EDIT CONFIGURATION SECTION - EDIT YOUR EVENT DETAILS HERE!
         // =========================================================================
         const EVENT_CONFIG = {
-            brideName: "Saba Nazir",
-            groomName: "Junaid Khaliq",
+            brideName: "Saba",
+            groomName: "Junaid",
             
             // Audio URL configuration
             bgAudioUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
